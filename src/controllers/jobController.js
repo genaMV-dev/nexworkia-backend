@@ -1,4 +1,3 @@
-
 import { Job } from '../models/job.js'
 import createHttpError from 'http-errors'
 

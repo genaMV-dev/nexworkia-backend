@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Industry, WorkFormat } from '../constants/userConstants';
+import { Industry, WorkFormat } from '../constants/userConstants.js';
 
 
 const jobSchema = new Schema(

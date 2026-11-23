@@ -1,6 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
-import { Industry, WorkFormat } from '../constants/userConstants';
+import { Industry, WorkFormat } from '../constants/userConstants.js';
 
 const objectIdValidator = (value, helpers) => {
   if (!isValidObjectId(value)) {

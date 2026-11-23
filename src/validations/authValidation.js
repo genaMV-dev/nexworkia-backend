@@ -1,5 +1,5 @@
 import { Joi, Segments } from 'celebrate';
-import { Role } from '../constants/userConstants';
+import { Role } from '../constants/userConstants.js';
 
 export const registerUserSchema = {
   [Segments.BODY]: Joi.object({
