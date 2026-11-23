@@ -7,7 +7,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { logger } from './middleware/logger.js';
-// import { connectMongoDB } from './db/connectMongoDB.js';
+import { connectMongoDB } from './db/connectMongoDB.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { errors } from 'celebrate';
@@ -30,7 +30,7 @@ app.use(notFoundHandler);
 
 app.use(errors());
 app.use(errorHandler);
-// await connectMongoDB();
+await connectMongoDB();
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on: ${process.env.PORT || 3000}`);
