@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { Industry, Role, WorkFormat } from '../constants/userConstants.js';
+import { Industry } from '../constants/userConstants.js';
 
 const userSchema = new Schema(
   {
@@ -7,19 +7,13 @@ const userSchema = new Schema(
     lastname: { type: String, required: true, trim: true },
     email: { type: String, unique: true, required: true, trim: true },
     password: { type: String, required: true, minlength: 8 },
-    skills: { type: [String], default: [] },
-    languages: { type: [String], default: [] },
-    experience: { type: Number, default: 0 },
-    education: { type: String, default: '' },
-    resume: { type: String, default: null },
     location: { type: String, default: '' },
-    expectedSalary: { type: Number, default: 0 },
-    position: { type: String, default: '' },
-    workFormat: { type: WorkFormat, default: 'on-site' },
-    role: { type: Role, default: 'employee' },
-    industry: { type: Industry, default: 'it' },
+    industry: { type: String, enum: Industry, default: 'it' },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    discriminatorKey: 'role',
+  }
 );
 
 userSchema.methods.toJSON = function () {
