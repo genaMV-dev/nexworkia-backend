@@ -1,24 +1,33 @@
+
 import { User } from '../models/user.js';
+import { Employee } from '../models/employee.js';
+import { Employer } from '../models/employer.js';
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import { Session } from '../models/session.js';
 
 export const registerUser = async (req, res) => {
-  const exitUser = await User.findOne({
-    email: req.body.email,
-  });
+  const { firstname, lastname, email, password, role } = req.body;
 
-  if (exitUser) {
+  if (!['employee', 'employer'].includes(role)) {
+    throw createHttpError(400, 'Invalid role');
+  }
+
+  const existingUser = await User.findOne({ email });
+
+  if (existingUser) {
     throw createHttpError(400, 'Email is already in use');
   }
 
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    role: req.body.role,
+  const UserModel = role === 'employer' ? Employer : Employee;
+
+  const user = await UserModel.create({
+    firstname,
+    lastname,
+    email,
     password: hashedPassword,
   });
 
@@ -37,7 +46,10 @@ export const loginUser = async (req, res) => {
     throw createHttpError(401, 'Invalid credentials');
   }
 
-  const isValidPassword = await bcrypt.compare(req.body.password, user.password);
+  const isValidPassword = await bcrypt.compare(
+    req.body.password,
+    user.password
+  );
 
   if (!isValidPassword) {
     throw createHttpError(401, 'Invalid credentials');
@@ -50,7 +62,7 @@ export const loginUser = async (req, res) => {
   const newSession = await createSession(user._id);
   setSessionCookies(res, newSession);
 
-  const userData = user.toObject();
+  const userData = user.toJSON();
 
   res.status(200).json({
     ...userData,
@@ -88,7 +100,8 @@ export const refreshUserSession = async (req, res) => {
     throw createHttpError(401, 'No session');
   }
 
-  const isRefreshTokenExpired = session.refreshTokenValidUntil < new Date();
+  const isRefreshTokenExpired =
+    session.refreshTokenValidUntil < new Date();
 
   if (isRefreshTokenExpired) {
     await session.deleteOne();

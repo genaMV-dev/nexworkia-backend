@@ -13,7 +13,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { errors } from 'celebrate';
 import authRoutes from './routes/authRoutes.js';
 import jobsRoutes from './routes/jobsRoutes.js';
-import userRoutes from './routes/userRoutes.js';
+import usersRoutes from './routes/usersRoutes.js';
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.use(cookieParser());
 
 app.use(authRoutes);
 app.use(jobsRoutes);
-app.use(userRoutes);
+app.use(usersRoutes);
 
 app.use(notFoundHandler);
 
