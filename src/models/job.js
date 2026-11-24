@@ -54,7 +54,6 @@ const jobSchema = new Schema(
         trim: true,
         required: true,
     },
-    author: { type: String, required: true },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
