@@ -92,9 +92,10 @@ export const getJobById = async (req, res) => {
 // POST /jobs
 export const createJob = async (req, res) => {
   const job = await Job.create({
-    ...req.body,
-    employerId: req.user._id,
-  })
+  ...req.body,
+  userId: req.user._id,
+  employerId: req.user._id,
+})
 
   res.status(201).json(job)
 }
